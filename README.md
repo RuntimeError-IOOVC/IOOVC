@@ -13,6 +13,13 @@ framework. Clone it, rename it, ship it to any static host.
 
 ---
 
+## Choosing what to build
+
+See **[docs/ideas.md](docs/ideas.md)** for twelve entry ideas written against
+the criteria, the six-question filter, the graveyard of ideas that lose points,
+a template for turning any idea into a one-line C1 pitch, and a worked example
+of a finished entry described end to end.
+
 ## Quick start
 
 ES modules are blocked on `file://` by CORS, so use any static server. There is
@@ -43,6 +50,7 @@ scripts/ui.js              shared helpers: toast, clipboard, safe storage
 tests/formula.test.mjs     guards the weights and the scoring maths (node --test)
 data/ioovc-2026.json       official facts as reference data for your own tooling
 assets/favicon.svg         laurel star
+docs/ideas.md              twelve entry ideas and the filter for choosing one
 ```
 
 ### Make it yours
