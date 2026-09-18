@@ -1,39 +1,40 @@
-# IOOVC - International Olympics of Vibe Coding 2026
+# Argument Engine
 
-Competition entry workspace for [IOOVC](https://ioovc.org).
+**A debugger for human arguments.** IOOVC 2026 entry (Fjgiofjg).
+
+> Humans debug code. Why don't we debug reasoning?
+
+Argument Engine takes a plain-text argument, compiles it into a reasoning
+graph, flags logical weaknesses with compiler-style diagnostics
+(ARG001-ARG010), and can then attack the reasoning path (find the minimum
+logical cut) or repair it (steelman).
+
+    argument  -->  compile  -->  reasoning graph  -->  diagnostics
+                                                     |-- destroy (attack)
+                                                     +-- steelman (repair)
 
 ## Repository layout
 
     .
-    ├── debate-bedrock/     # The entry: Debate Bedrock (see its own README)
-    │   ├── index.html
-    │   ├── css/styles.css
-    │   ├── js/             # app.js + testable logic modules (timer, formats, state)
-    │   ├── tests/          # node --test, zero dependencies
+    ├── argument-engine/      # The entry: app + docs (see its own README)
+    │   ├── SPEC.md           # Full product spec
+    │   ├── MVP.md            # The five features and what we deliberately skip
+    │   ├── index.html        # Four-pane debugger UI
+    │   ├── css/  js/  tests/ # Zero-dependency static app + node --test suite
     │   └── package.json
-    ├── Debate_Bedrock.md   # Project specification for the entry
-    └── ideas.md            # Idea bank: candidate entries and how the winner was picked
+    ├── ideas.md              # Idea bank: why a structural, no-signup tool won
+    ├── Debate_Bedrock.md     # Original concept note
+    └── debate-bedrock/       # SUPERSEDED scaffold (earlier concept), pending removal
 
-## The entry: Debate Bedrock
+## Quick start
 
-A local-first debate practice timer. Zero dependencies, no build step, no
-accounts - everything lives in the browser's localStorage.
-
-Quick start:
-
-    cd debate-bedrock
+    cd argument-engine
     python3 -m http.server 8000   # or: npx serve .
 
-Then open http://localhost:8000.
+Open http://localhost:8000. Run the test suite with `npm test` (Node 18+,
+no dependencies).
 
-Run the tests:
+## Docs
 
-    cd debate-bedrock
-    npm test                      # node --test tests/ (Node 18+, no packages)
-
-## Picking the idea
-
-ideas.md scores each candidate against the published judging criteria with the
-weights (4*C1 + 3*C2 + 2*C3 + 1*C4) / 10, and explains why a no-signup,
-local-first tool has a structural advantage. Debate_Bedrock.md specifies the
-chosen entry in detail.
+- argument-engine/SPEC.md - identity, diagnostics taxonomy, UI language, demo story
+- argument-engine/MVP.md - the five features, analysis backends, explicit non-goals
