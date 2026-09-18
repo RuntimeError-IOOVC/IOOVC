@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Debate Bedrock - local-first practice timer</title>
+    <meta
+      name="description"
+      content="A zero-dependency, local-first debate practice timer. No accounts, no server: everything stays in your browser."
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header">
+      <h1>Debate Bedrock</h1>
+      <p class="tagline">
+        Local-first debate practice timer. No accounts, no server - everything
+        stays in your browser.
+      </p>
+    </header>
+
+    <main id="main">
+      <section class="card" aria-labelledby="motion-heading">
+        <h2 id="motion-heading">Motion</h2>
+        <label for="motion-input">This house...</label>
+        <textarea
+          id="motion-input"
+          placeholder="e.g. This House Would ban zoos"
+          autocomplete="off"
+        ></textarea>
+      </section>
+
+      <section class="card" aria-labelledby="format-heading">
+        <h2 id="format-heading">Format</h2>
+        <label for="format-select">Debate format</label>
+        <select id="format-select"></select>
+      </section>
+
+      <section class="card" aria-labelledby="timer-heading">
+        <h2 id="timer-heading">Timer</h2>
+        <p class="speech-label" id="speech-label">-</p>
+        <p class="clock" id="clock">00:00</p>
+        <p class="badge-row"><span class="badge" id="poi-badge">-</span></p>
+        <div
+          class="progress"
+          id="timer-progress"
+          role="progressbar"
+          aria-label="Time remaining"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="100"
+        ></div>
+        <p class="status" id="timer-status" role="status">Ready</p>
+        <div class="controls">
+          <button type="button" id="btn-prev" aria-label="Previous speech">
+            Prev
+          </button>
+          <button type="button" id="btn-start" class="primary">Start</button>
+          <button type="button" id="btn-reset">Reset</button>
+          <button type="button" id="btn-next" aria-label="Next speech">
+            Next
+          </button>
+        </div>
+        <p class="status kbd-hints">
+          Shortcuts: <kbd>Space</kbd> start / pause, <kbd>N</kbd> next,
+          <kbd>R</kbd> reset
+        </p>
+      </section>
+
+      <section class="card" aria-labelledby="sequence-heading">
+        <h2 id="sequence-heading">Speaking order</h2>
+        <ol id="sequence-list"></ol>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Motion, format and progress are stored in <code>localStorage</code> on
+        this device only.
+      </p>
+    </footer>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

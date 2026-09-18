@@ -1,0 +1,219 @@
+/* Design tokens: light and dark come from the same variables. */
+:root {
+  color-scheme: light dark;
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --text: #1d1b16;
+  --muted: #6b6558;
+  --accent: #2f6fed;
+  --accent-contrast: #ffffff;
+  --ok: #1a7f37;
+  --border: #ddd8ce;
+  --radius: 12px;
+  --focus: 3px solid #2f6fed;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15151a;
+    --surface: #1f1f26;
+    --text: #f2f0ea;
+    --muted: #a5a095;
+    --accent: #6b9bff;
+    --accent-contrast: #0d1117;
+    --border: #3a3a44;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC",
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+  z-index: 10;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+.site-header,
+main,
+.site-footer {
+  width: min(720px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+.site-header {
+  padding-block: 2rem 1rem;
+}
+.site-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+.tagline {
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-block: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+textarea,
+select {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.75rem;
+}
+textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.clock {
+  font-size: clamp(3.5rem, 18vw, 7rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  margin: 0.5rem 0;
+}
+
+.speech-label {
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.badge[data-open="true"] {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.badge-row {
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-block: 0.75rem;
+}
+.progress::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: var(--progress, 100%);
+  background: var(--accent);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+button {
+  font: inherit;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: inherit;
+  cursor: pointer;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+.status {
+  text-align: center;
+  color: var(--muted);
+  min-height: 1.5rem;
+  margin: 0.25rem 0 0;
+}
+
+#sequence-list li.is-current {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.kbd-hints {
+  font-size: 0.9rem;
+}
+kbd {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+  background: var(--surface);
+  font-size: 0.85em;
+}
+
+:focus-visible {
+  outline: var(--focus);
+  outline-offset: 2px;
+}
+
+.site-footer {
+  padding-block: 1.5rem 3rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
