@@ -30,8 +30,24 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
-          # 建立/更新 production secret（值來自同名 GitHub Actions secret）
-          secrets: |
-            OPENROUTER_API_KEY
         env:
+          # 已先 build 好 .open-next/worker.js，關閉 wrangler 自動再 build 一次
+          OPEN_NEXT_DEPLOY: "true"
+
+      - name: Upload OPENROUTER_API_KEY as a runtime secret
+        if: ${{ secrets.OPENROUTER_API_KEY != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          printf 'OPENROUTER_API_KEY=%s\n' "$OPENROUTER_API_KEY" > .secret.env
+          npx wrangler secret bulk .secret.env
+          rm -f .secret.env
+
+      - name: Warn if the OpenRouter key is missing
+        if: ${{ secrets.OPENROUTER_API_KEY == '' }}
+        run: |
+          echo "::warning::OPENROUTER_API_KEY secret is not set in this repository."
+          echo "Add it under Settings -> Secrets and variables -> Actions, or set it"
+          echo "in the Cloudflare dashboard under Settings -> Variables and Secrets."
