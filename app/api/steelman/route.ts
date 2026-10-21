@@ -472,10 +472,6 @@ return Response.json({
   ...result.data,
   changes: cleanedChanges,
 });
-
-    return Response.json(
-      result.data
-    );
   } catch (error) {
     console.error(
       "STEELMAN ERROR:",

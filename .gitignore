@@ -4,6 +4,10 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+cloudflare-env.d.ts
+.dev.vars
+.open-next/
+.wrangler/
 
 # local env / secrets
 .env

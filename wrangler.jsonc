@@ -1,0 +1,23 @@
+// Cloudflare deployment configuration (used by opennextjs-cloudflare).
+// Secrets (OPENROUTER_API_KEY) are set with: wrangler secret put OPENROUTER_API_KEY
+{
+  "name": "argument-engine",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-02-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "LLM_PROVIDER": "openrouter",
+    "OPENROUTER_MODELS": "nvidia/nemotron-3.5-super-vl:free,minimax/minimax-m3.1-flash:free",
+    "OPENROUTER_TITLE": "Argument Engine",
+    "OPENROUTER_REFERER": "https://argument-engine.pages.dev",
+    "OPENROUTER_TIMEOUT_MS": "240000"
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
