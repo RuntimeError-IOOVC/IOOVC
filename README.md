@@ -1,40 +1,36 @@
-# Argument Engine
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**A debugger for human arguments.** IOOVC 2026 entry (Fjgiofjg).
+## Getting Started
 
-> Humans debug code. Why don't we debug reasoning?
+First, run the development server:
 
-Argument Engine takes a plain-text argument, compiles it into a reasoning
-graph, flags logical weaknesses with compiler-style diagnostics
-(ARG001-ARG010), and can then attack the reasoning path (find the minimum
-logical cut) or repair it (steelman).
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-    argument  -->  compile  -->  reasoning graph  -->  diagnostics
-                                                     |-- destroy (attack)
-                                                     +-- steelman (repair)
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Repository layout
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-    .
-    ├── argument-engine/      # The entry: app + docs (see its own README)
-    │   ├── SPEC.md           # Full product spec
-    │   ├── MVP.md            # The five features and what we deliberately skip
-    │   ├── index.html        # Four-pane debugger UI
-    │   ├── css/  js/  tests/ # Zero-dependency static app + node --test suite
-    │   └── package.json
-    ├── ideas.md              # Idea bank: why a structural, no-signup tool won
-    ├── Debate_Bedrock.md     # Original concept note
-    └── debate-bedrock/       # SUPERSEDED scaffold (earlier concept), pending removal
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Quick start
+## Learn More
 
-    cd argument-engine
-    python3 -m http.server 8000   # or: npx serve .
+To learn more about Next.js, take a look at the following resources:
 
-Open http://localhost:8000. Run the test suite with `npm test` (Node 18+,
-no dependencies).
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Docs
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- argument-engine/SPEC.md - identity, diagnostics taxonomy, UI language, demo story
-- argument-engine/MVP.md - the five features, analysis backends, explicit non-goals
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
