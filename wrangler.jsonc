@@ -1,21 +1,30 @@
-// Cloudflare deployment configuration (used by opennextjs-cloudflare).
-// Secrets (OPENROUTER_API_KEY) are set with: wrangler secret put OPENROUTER_API_KEY
+// Cloudflare Workers 部署設定（由 @opennextjs/cloudflare 使用）。
+//
+// Worker 名稱必須與 Cloudflare 儀表板上的專案名稱一致
+// （目前是 "ioovc"，取自 Cloudflare 後端建立的 Worker）。
+// 若兩邊不一致，deploy 會出現 error 10143。
+//
+// 機密值（OPENROUTER_API_KEY）不要寫在這裡：
+//   - 本機：wrangler secret put OPENROUTER_API_KEY
+//   - 線上：Cloudflare 儀表板 → Settings → Variables and Secrets → Secret
+//   - CI：   GitHub Actions secret（見 .github/workflows/deploy.yml）
 {
-  "name": "argument-engine",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ioovc",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-02-14",
-  "compatibility_flags": ["nodejs_compat"],
-  "vars": {
-    "LLM_PROVIDER": "openrouter",
-    "OPENROUTER_MODELS": "nvidia/nemotron-3.5-super-vl:free,minimax/minimax-m3.1-flash:free",
-    "OPENROUTER_TITLE": "Argument Engine",
-    "OPENROUTER_REFERER": "https://argument-engine.pages.dev",
-    "OPENROUTER_TIMEOUT_MS": "240000"
-  },
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
     "not_found_handling": "none"
+  },
+  "vars": {
+    "LLM_PROVIDER": "openrouter",
+    "OPENROUTER_MODELS": "nvidia/nemotron-3.5-super-vl:free,minimax/minimax-m3.1-flash:free",
+    "OPENROUTER_TITLE": "Argument Engine",
+    "OPENROUTER_REFERER": "https://ioovc.pages.dev",
+    "OPENROUTER_TIMEOUT_MS": "240000"
   },
   "observability": {
     "enabled": true
