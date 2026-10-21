@@ -1,4 +1,12 @@
 node_modules/
+.next/
+*.tsbuildinfo
 .DS_Store
 Thumbs.db
 *.log
+
+# local env / secrets
+.env
+.env.local
+.env.*.local
+

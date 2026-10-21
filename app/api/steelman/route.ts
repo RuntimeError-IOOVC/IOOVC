@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+import { chatJSON } from "@/lib/llm";
+import { normaliseSteelman } from "@/lib/normalize";
+
 const DiagnosticSchema = z.object({
   code: z.string(),
   issue: z.string(),
@@ -242,35 +245,8 @@ export async function POST(
       );
     }
 
-    const ollamaResponse =
-      await fetch(
-        "http://localhost:11434/api/chat",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            model:
-              "qwen3:4b-instruct",
-
-            stream: false,
-
-            format: jsonSchema,
-
-            options: {
-              temperature: 0,
-            },
-
-            messages: [
-              {
-                role: "system",
-
-                content: `
-You are the Steelman Engine inside Argument Engine.
+    const rawResult = (await chatJSON({
+      system: `You are the Steelman Engine inside Argument Engine.
 
 Your task is to create the strongest defensible version
 of the user's argument while preserving its core position.
@@ -391,13 +367,7 @@ BAD:
 GOOD:
 "Policy intervention now requires demonstrated causal harm."
                 `,
-              },
-
-              {
-                role: "user",
-
-                content: `
-ORIGINAL ARGUMENT:
+      user: `ORIGINAL ARGUMENT:
 
 ${body.argument}
 
@@ -407,34 +377,16 @@ ${JSON.stringify(
   body.graph,
   null,
   2
-)}
-                `,
-              },
-            ],
-          }),
-        }
-      );
+)}`,
+      schema: jsonSchema,
+      schemaName: "steelman",
+      validate: (value) =>
+        SteelmanSchema.safeParse(
+          normaliseSteelman(value)
+        ).success,
+    }));
 
-    if (!ollamaResponse.ok) {
-      throw new Error(
-        `Ollama error ${ollamaResponse.status}`
-      );
-    }
-
-    const ollamaData =
-      await ollamaResponse.json();
-
-    const rawContent =
-      ollamaData.message?.content;
-
-    if (!rawContent) {
-      throw new Error(
-        "Ollama returned no content."
-      );
-    }
-
-    const parsed =
-      JSON.parse(rawContent);
+    const parsed = normaliseSteelman(rawResult);
 
     const result =
       SteelmanSchema.safeParse(

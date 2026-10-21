@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+import { chatJSON } from "@/lib/llm";
+import { normaliseArgument } from "@/lib/normalize";
+
 const DiagnosticSchema = z.object({
   code: z.string(),
   issue: z.string(),
@@ -187,32 +190,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const ollamaResponse = await fetch(
-      "http://localhost:11434/api/chat",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          model: "qwen3:4b-instruct",
-
-          stream: false,
-
-          format: argumentJsonSchema,
-
-          options: {
-            temperature: 0,
-          },
-
-          messages: [
-            {
-              role: "system",
-
-              content: `
-You are the compiler inside Argument Engine,
+    const rawResult = (await chatJSON({
+      system: `You are the compiler inside Argument Engine,
 a debugger for human reasoning.
 
 Convert the user's argument into the SMALLEST faithful
@@ -412,36 +391,35 @@ premise-1 -> inference-1
 premise-2 -> inference-1
 inference-1 -> conclusion-1
 `,
-            },
+      user: argumentText,
+      schema: argumentJsonSchema,
+      schemaName: "argument",
+      validate: (value) =>
+        ArgumentSchema.safeParse(
+          normaliseArgument(value)
+        ).success,
+    }));
 
-            {
-              role: "user",
-              content: argumentText,
-            },
-          ],
-        }),
-      }
-    );
-
-    if (!ollamaResponse.ok) {
-      const errorText = await ollamaResponse.text();
-
-      throw new Error(
-        `Ollama error ${ollamaResponse.status}: ${errorText}`
-      );
-    }
-
-    const ollamaData = await ollamaResponse.json();
-
-    const rawContent = ollamaData.message?.content;
-
-    if (!rawContent) {
-      throw new Error(
-        "Ollama returned no message content."
-      );
-    }
-
-    const parsedJson = JSON.parse(rawContent);
+    const parsedJson = normaliseArgument(rawResult) as {
+      source: string;
+      nodes: {
+        id: string;
+        type: string;
+        text: string;
+        diagnostic: null | {
+          code: string;
+          issue: string;
+          explanation: string;
+          severity: "LOW" | "MEDIUM" | "HIGH";
+        };
+      }[];
+      edges: {
+        id: string;
+        source: string;
+        target: string;
+        relation: string;
+      }[];
+    };
 
     // Force source to exactly match user input.
     parsedJson.source = argumentText;
@@ -492,7 +470,7 @@ parsedJson.nodes = parsedJson.nodes.map(
       );
 
       throw new Error(
-        "Ollama returned JSON that does not match the Argument schema."
+        "Model returned JSON that does not match the Argument schema."
       );
     }
 

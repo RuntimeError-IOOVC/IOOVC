@@ -1,38 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Argument Engine
+
+A debugger for human arguments. Next.js 16 app that compiles an argument into a
+reasoning graph, flags reasoning weaknesses, finds the minimum logical cut, and
+can steelman the argument back.
+
+## LLM provider
+
+The engine talks to an LLM through one of two providers, selected automatically:
+
+| Provider    | When it is used                                   | Endpoint |
+| ----------- | ------------------------------------------------- | -------- |
+| `openrouter`| `OPENROUTER_API_KEY` is set (default)             | `https://openrouter.ai/api/v1` |
+| `ollama`    | no OpenRouter key, or `LLM_PROVIDER=ollama`       | `http://localhost:11434` |
+
+### Setup (OpenRouter)
+
+```bash
+cp .env.example .env.local
+# then edit .env.local and paste your key from https://openrouter.ai/keys
+```
+
+```bash
+LLM_PROVIDER=openrouter
+OPENROUTER_API_KEY=sk-or-...
+OPENROUTER_MODELS=nvidia/nemotron-3.5-super-vl:free,minimax/minimax-m3.1-flash:free
+```
+
+`OPENROUTER_MODELS` is a comma-separated **fallback list**. The first model that
+returns output matching the schema wins; if it errors, times out, or returns
+malformed JSON, the next one is tried.
+
+### Setup (local Ollama)
+
+```bash
+LLM_PROVIDER=ollama
+OLLAMA_MODEL=qwen3:4b-instruct
+```
+
+Ollama is used as-is with its native `/api/chat` structured-output mode.
+
+### Notes
+
+- `.env.local` is git-ignored; `.env.example` is committed as the template.
+- Requests use OpenRouter's `response_format: json_schema` structured output.
+- Model output is normalised by `lib/normalize.ts` before Zod validation, so
+  minor shape deviations (`from`/`to` instead of `source`/`target`, a diagnostic
+  given as a plain string, and similar) are repaired rather than fatal.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Smoke test
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+With the dev server running:
 
-## Learn More
+```bash
+node scripts/smoke-test.mjs
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-*test message*
+It compiles and steelmans three sample arguments and prints graph statistics.
